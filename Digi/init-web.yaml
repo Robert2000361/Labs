@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-web
+spec:
+  volumes:
+    - name: html-vol
+      emptyDir: {}
+
+  initContainers:
+    - name: html-writer
+      image: busybox
+      command:
+        - /bin/sh
+        - -c
+        - echo "<h1>Ready!</h1>" > /data/index.html
+      volumeMounts:
+        - name: html-vol
+          mountPath: /data
+
+  containers:
+    - name: nginx
+      image: nginx
+      volumeMounts:
+        - name: html-vol
+          mountPath: /usr/share/nginx/html

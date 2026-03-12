@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: verify-demo
+  labels:
+    app: verify-demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: verify-demo
+  template:
+    metadata:
+      labels:
+        app: verify-demo
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - sh
+              - -c
+              - 'echo "<h1>Pod: $HOSTNAME</h1>" > /usr/share/nginx/html/index.html'

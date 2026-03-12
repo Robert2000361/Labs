@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: envapp-deploy
+  labels:
+    app: envapp
+    version: "1.0"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: envapp
+  template:
+    metadata:
+      labels:
+        app: envapp
+        version: "1.0"
+    spec:
+      containers:
+      - name: envapp
+        image: busybox
+        command: ["sh", "-c"]
+        args:
+        - |
+          while true; do
+            echo "App: $APP_NAME | Version: $APP_VERSION | Pod: $HOSTNAME"
+            sleep 5
+          done
+        env:
+        - name: APP_NAME
+          value: "MyWebApp"
+        - name: APP_VERSION
+          value: "1.0"
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "32Mi"
+          limits:
+            cpu: "100m"
+            memory: "64Mi"

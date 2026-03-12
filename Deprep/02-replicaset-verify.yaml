@@ -1,0 +1,32 @@
+# This file is used to demonstrate self-healing
+# Delete one pod manually and watch RS recreate it
+# kubectl delete pod <pod-name>
+# kubectl get pods -w
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: healing-rs
+  labels:
+    tier: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.21
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "32Mi"
+          limits:
+            cpu: "100m"
+            memory: "64Mi"

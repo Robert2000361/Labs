@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: setup-pod
+spec:
+  volumes:
+    - name: app-data
+      emptyDir: {}
+
+  initContainers:
+    - name: step-1
+      image: busybox
+      command:
+        - /bin/sh
+        - -c
+        - mkdir -p /app/data && echo "step1 done" > /app/data/log.txt
+      volumeMounts:
+        - name: app-data
+          mountPath: /app
+
+    - name: step-2
+      image: busybox
+      command:
+        - /bin/sh
+        - -c
+        - echo "step2 done" >> /app/data/log.txt
+      volumeMounts:
+        - name: app-data
+          mountPath: /app
+
+  containers:
+    - name: reader
+      image: busybox
+      command:
+        - /bin/sh
+        - -c
+        - cat /app/data/log.txt && sleep 3600
+      volumeMounts:
+        - name: app-data
+          mountPath: /app
