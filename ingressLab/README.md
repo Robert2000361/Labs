@@ -2,7 +2,7 @@
 # Kubernetes Ingress Lab
 ## Path‑Based Routing, Host‑Based Routing, Path Types, and Default Backend
 
-![Dev Environment](ingress.png)
+![Dev Environment](ingress.jpg)
 
 <p align="center">
   <b>Kubernetes Ingress Architecture Flow</b>
