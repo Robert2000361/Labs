@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: selective-pod
+spec:
+  containers:
+    - name: selective-container
+      image: busybox
+      command: ["/bin/sh", "-c", "env && sleep 3600"]
+      env:
+        - name: COLOR
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_COLOR
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_PORT
+  restartPolicy: Never

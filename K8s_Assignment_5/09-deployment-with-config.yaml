@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-configured
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp-configured
+  template:
+    metadata:
+      labels:
+        app: webapp-configured
+    spec:
+      containers:
+        - name: webapp-container
+          image: busybox
+          command: ["/bin/sh", "-c", "env && sleep 3600"]
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: db-secret
