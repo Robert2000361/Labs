@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sa-demo-2
+  namespace: dev
+spec:
+  nodeName: minikube-m03
+  serviceAccountName: app-sa
+  containers:
+  - name: app
+    image: nginx:alpine
