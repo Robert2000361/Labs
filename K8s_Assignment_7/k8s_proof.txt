@@ -1,0 +1,69 @@
+--- Task 1: nodeName Pod ---
+NAME            READY   STATUS    RESTARTS   AGE     IP               NODE           NOMINATED NODE   READINESS GATES
+static-pinned   1/1     Running   0          2m10s   10.244.205.201   minikube-m02   <none>           <none>
+
+--- Task 2: NodeSelector & Pending Status ---
+NAME            READY   STATUS    RESTARTS   AGE    IP               NODE           NOMINATED NODE   READINESS GATES
+selector-demo   1/1     Running   0          3m3s   10.244.205.203   minikube-m02   <none>           <none>
+NAME               READY   STATUS    RESTARTS   AGE
+pending-selector   0/1     Pending   0          100s
+
+--- Task 3:NoSchedule-PreferNoSchedule-NoExecute Eviction Proof ---
+NAME     READY   STATUS    RESTARTS   AGE
+no-tol   0/1     Pending   0          4m14s
+NAME              READY   STATUS    RESTARTS   AGE
+with-toleration   1/1     Running   0          63s
+evict-me                      1/1     Running   0               9s
+
+--- Task 4: Confirm it schedules with required labeled and pending after unlabeling then schedules again with preferred even with out the label---
+NAME            READY   STATUS    RESTARTS   AGE
+affinity-demo   1/1     Running   0          8m31s
+NAME            READY   STATUS    RESTARTS   AGE
+affinity-demo   0/1     Pending   0          45s
+NAME             READY   STATUS    RESTARTS   AGE
+affinity-demo2   1/1     Running   0          31s
+•	kubectl describe pod affinity-demo
+Events:
+  Type     Reason            Age                   From              
+  Message
+  ----     ------            ----                  ----               
+  -------
+  Warning  FailedScheduling  3m49s (x15 over 74m)  default-scheduler  
+  0/3 nodes are available: 3 node(s) didn't match Pod's node affinity/selector. 
+  no new claims to deallocate, preemption: 0/3 nodes are available: 3 Preemption is not helpful for scheduling.
+
+--- Task 5: QoS Classes Verification ---
+
+  QoS Class:                   Guaranteed
+QoS Class:                   Burstable
+QoS Class:                   BestEffort
+
+ affinity-demo 	BestEffort 
+  affinity-demo2 	BestEffort 
+  besteffort-pod 	BestEffort 
+  burstable-pod 	Burstable 
+  evict-me 	BestEffort 
+  guaranteed-pod 	Guaranteed 
+  liveness-http 	BestEffort 
+  pending-selector 	BestEffort 
+  production-app 	BestEffort 
+  ready-demo-7bd799648c-92h6m 	BestEffort 
+  ready-demo-7bd799648c-jgtq6 	BestEffort 
+  secure-pod 	BestEffort 
+ 
+--- Task 6: Deploy a DaemonSet — One Pod Per Node ---
+NAME           DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+node-monitor   3         3         3       3            3           <none>          4m48s
+node-monitor-4wtc9            1/1     Running   0               4m55s   10.244.120.70    minikube       <none>           <none>
+node-monitor-dh8f4            1/1     Running   0               4m55s   10.244.151.11    minikube-m03   <none>           <none>
+node-monitor-mwl5b            1/1     Running   0               4m55s   10.244.205.213   minikube-m02   <none>           <none>
+NAME          DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+calico-node   3         3         3       3            3           kubernetes.io/os=linux   21h
+kube-proxy    3         3         3       3            3           kubernetes.io/os=linux   21h
+
+--- Task 7: Static Pod Proof ---
+NAME                        READY   STATUS    RESTARTS   AGE
+static-nginx-minikube-m02   1/1     Running   0          2m31s
+static-nginx-minikube-m02     1/1     Running   0              69s
+pod "static-nginx-minikube-m02" deleted from default namespace
+static-nginx-minikube-m02     1/1     Running   0              5s

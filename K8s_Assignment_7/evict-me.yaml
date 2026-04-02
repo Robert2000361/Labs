@@ -1,0 +1,11 @@
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: evict-me
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: minikube-m02
+  containers:
+  - name: nginx
+    image: nginx

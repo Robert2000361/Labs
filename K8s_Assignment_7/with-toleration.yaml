@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: with-toleration
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: minikube-m02
+  tolerations:
+  - key: "test"
+    operator: "Equal"
+    value: "true"
+    effect: "NoSchedule"
+  containers:
+  - name: app
+    image: nginx
